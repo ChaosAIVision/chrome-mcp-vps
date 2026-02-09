@@ -1,0 +1,26 @@
+services:
+  chrome-mcp:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: chrome-mcp-server
+    ports:
+      - "${HOST_MCP_PORT:-3100}:3100"
+      - "${HOST_UI_PORT:-6080}:6080"
+    environment:
+      MCP_PORT: "3100"
+      NOVNC_PORT: "6080"
+      CHROME_DEBUG_PORT: "9222"
+      MCP_TRANSPORT: "${MCP_TRANSPORT:-streamablehttp}"
+      CHROME_START_URL: "${CHROME_START_URL:-about:blank}"
+      SCREEN_WIDTH: "${SCREEN_WIDTH:-1920}"
+      SCREEN_HEIGHT: "${SCREEN_HEIGHT:-1080}"
+      SCREEN_DEPTH: "${SCREEN_DEPTH:-24}"
+      MCP_EXTRA_ARGS: "${MCP_EXTRA_ARGS:-}"
+    shm_size: "2gb"
+    volumes:
+      - chrome-profile:/data/chrome-profile
+    restart: unless-stopped
+
+volumes:
+  chrome-profile:
